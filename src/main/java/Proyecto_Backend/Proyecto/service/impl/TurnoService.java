@@ -9,11 +9,15 @@ import Proyecto_Backend.Proyecto.dto.response.TurnoResponseDto;
 import Proyecto_Backend.Proyecto.entity.Odontologo;
 import Proyecto_Backend.Proyecto.entity.Paciente;
 import Proyecto_Backend.Proyecto.entity.Turno;
+import Proyecto_Backend.Proyecto.exception.BadRequestException;
+import Proyecto_Backend.Proyecto.exception.ResourceNotFoundException;
 import Proyecto_Backend.Proyecto.repository.ITurnoRepository;
 import Proyecto_Backend.Proyecto.service.IOdontologoService;
 import Proyecto_Backend.Proyecto.service.IPacienteService;
 import Proyecto_Backend.Proyecto.service.ITurnoService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,7 @@ import java.util.Optional;
 
 @Service
 public class TurnoService implements ITurnoService {
+    private final Logger logger = LoggerFactory.getLogger(TurnoService.class);
     private ITurnoRepository turnoRepository;
     private IPacienteService pacienteService;
     private IOdontologoService odontologoService;
@@ -57,17 +62,32 @@ public class TurnoService implements ITurnoService {
             turnoResponseDto = obtenerTurnoResponse(turnoDesdeBD);
             // armado con modelmapper
             turnoResponseDto = convertirTurnoEnResponse(turnoDesdeBD);
+
+            return turnoResponseDto;
+        }else if (!paciente.isPresent() && odontologo.isPresent()){
+            throw new BadRequestException("Paciente no encontrado");
+        }else if (paciente.isPresent() && !odontologo.isPresent()){
+            throw new BadRequestException("Odontologo no encontrado");
+        }else{
+            throw new BadRequestException("Paciente y Odontologo no encontrado");
         }
-        return turnoResponseDto;
+
     }
 
 
     @Override
     public Optional<TurnoResponseDto> buscarPorId(Integer id) {
         Optional<Turno> turno = turnoRepository.findById(id);
-        TurnoResponseDto turnoRespuesta = convertirTurnoEnResponse(turno.get());
-        return Optional.of(turnoRespuesta);
+        if(turno.isPresent()){
+            TurnoResponseDto turnoRespuesta = convertirTurnoEnResponse(turno.get());
+            return Optional.of(turnoRespuesta);
+        }else{
+            throw new BadRequestException("Turno no encontrado");
+        }
+
     }
+
+
     @Override
     public List<TurnoResponseDto> buscarTodos() {
         List<Turno> turnosDesdeBD = turnoRepository.findAll();
@@ -76,7 +96,10 @@ public class TurnoService implements ITurnoService {
             // manera manual
             //turnosRespuesta.add(obtenerTurnoResponse(t));
             // model mapper
-            turnosRespuesta.add(convertirTurnoEnResponse(t));
+            TurnoResponseDto turnoRespuesta =convertirTurnoEnResponse(t);
+            logger.info("turno "+ turnoRespuesta);
+            turnosRespuesta.add(turnoRespuesta);
+
         }
         return turnosRespuesta;
     }
@@ -90,13 +113,25 @@ public class TurnoService implements ITurnoService {
                     paciente.get(), odontologo.get(), LocalDate.parse(turnoModifyDto.getFecha())
             );
             turnoRepository.save(turno);
+        }else if (!paciente.isPresent() && odontologo.isPresent()){
+            throw new BadRequestException("Paciente no encontrado");
+        }else if (paciente.isPresent() && !odontologo.isPresent()){
+            throw new BadRequestException("Odontologo no encontrado");
+        }else{
+            throw new BadRequestException("Paciente y Odontologo no encontrado");
         }
     }
 
 
     @Override
     public void eliminarTurno(Integer id){
-        turnoRepository.deleteById(id);
+
+        Optional<Turno> turnoEncontrado = turnoRepository.findById(id);
+        if(turnoEncontrado.isPresent()){
+            turnoRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Turno no encontrado");
+        }
     }
 
     @Override

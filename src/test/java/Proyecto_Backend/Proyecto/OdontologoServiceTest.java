@@ -1,73 +1,75 @@
 package Proyecto_Backend.Proyecto;
 
+import Proyecto_Backend.Proyecto.entity.Domicilio;
 import Proyecto_Backend.Proyecto.entity.Odontologo;
+import Proyecto_Backend.Proyecto.entity.Paciente;
 import Proyecto_Backend.Proyecto.service.impl.OdontologoService;
+import Proyecto_Backend.Proyecto.service.impl.PacienteService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@Transactional
 class OdontologoServiceTest {
-    /*static final Logger logger = LoggerFactory.getLogger(OdontologoServiceTest.class);
-    OdontologoService odontologoService = new OdontologoService(new DaoH2Odontologo());
+    static final Logger logger = LoggerFactory.getLogger(OdontologoServiceTest.class);
+    @Autowired
+    OdontologoService odontologoService;
+    Odontologo odontologo;
+    Odontologo odontologoDesdeDb;
 
-    @BeforeAll
-    static void crearTabla(){
-        Connection connection = null;
-        try {
-            Class.forName("org.h2.Driver");
-            connection =  DriverManager.getConnection("jdbc:h2:./odontologos;INIT=RUNSCRIPT FROM 'create.sql'","sa","sa");
-        }catch (Exception e){
-            logger.error(e.getMessage());
-        }finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-            }
-        }
+    @BeforeEach
+    void cargarDatos(){
+
+        odontologo = new Odontologo();
+        odontologo.setApellido("Silva");
+        odontologo.setNombre("Mayren");
+        odontologo.setNumeroMatricula("48974646");
+        odontologoDesdeDb = odontologoService.guardarOdontologo(odontologo);
     }
 
+
     @Test
-    @DisplayName("----Testear que se agregue un odontologo de manera correcta----")
+    @DisplayName("Testear que un odontologo fue cargado correctamente")
     void caso1(){
-        //DADO
-        Odontologo odontologo = new Odontologo(1234,"Lucia","Cerpa");
-        //CUANDO
-        Odontologo odontologoDesdeBD = odontologoService.guardarOdontologo(odontologo);
-        // entonces
-        assertNotNull(odontologoDesdeBD);
-    }
-
-
-    @Test
-    @DisplayName("Testear que se listen todos los odontologos")
-    void caso2(){
-        //DADO
-        List<Odontologo> odontologos;
-        //CUANDO
-        odontologos = odontologoService.buscarTodos();
-        // entonces
-        assertNotNull(odontologos);
+        assertNotNull(odontologoDesdeDb.getId());
     }
 
     @Test
     @DisplayName("Testear que un odontologo pueda acceder por id")
+    void caso2(){
+        //Dado
+        Integer id = odontologoDesdeDb.getId();
+        //cuando
+        Odontologo odontologoRecuperado = odontologoService.buscarPorId(id).get();
+        // entonces
+        assertEquals(id, odontologoRecuperado.getId());
+    }
+
+    @Test
+    @DisplayName("Listar todos los odontologos")
     void caso3(){
         //Dado
-        Integer id = 1;
-        //cuando
-       Odontologo odontologoDesdeDb = odontologoService.buscarPorId(id);
+        List<Odontologo> odontologos;
+        // cuando
+        odontologos = odontologoService.buscarTodos();
         // entonces
-        assertEquals(id, odontologoDesdeDb.getId());
-    }*/
+        assertFalse(odontologos.isEmpty());
+    }
 
 }

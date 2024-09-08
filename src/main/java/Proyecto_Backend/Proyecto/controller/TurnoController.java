@@ -5,8 +5,10 @@ import Proyecto_Backend.Proyecto.dto.request.TurnoModifyDto;
 import Proyecto_Backend.Proyecto.dto.request.TurnoRequestDto;
 import Proyecto_Backend.Proyecto.dto.response.TurnoResponseDto;
 import Proyecto_Backend.Proyecto.entity.Turno;
+import Proyecto_Backend.Proyecto.exception.ResourceNotFoundException;
 import Proyecto_Backend.Proyecto.service.ITurnoService;
 import Proyecto_Backend.Proyecto.service.impl.TurnoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,9 @@ public class TurnoController {
     }
     //POST
     @PostMapping("/guardar")
-    public ResponseEntity<TurnoResponseDto> guardarTurno(@RequestBody TurnoRequestDto turnoRequestDto){
+    public ResponseEntity<TurnoResponseDto> guardarTurno(
+            @Valid @RequestBody TurnoRequestDto turnoRequestDto)
+    {
         return ResponseEntity.ok(turnoService.guardarTurno(turnoRequestDto));
     }
 
@@ -39,7 +43,7 @@ public class TurnoController {
     //PUT
 
     @PutMapping("/modificar")
-    public ResponseEntity<String>  modificarTurno(@RequestBody TurnoModifyDto turnoModifyDto){
+    public ResponseEntity<String>  modificarTurno(@Valid @RequestBody TurnoModifyDto turnoModifyDto){
         turnoService.modificarTurno(turnoModifyDto);
         return ResponseEntity.ok("{\"mensaje\": \"El turno fue modificado\"}");
     }

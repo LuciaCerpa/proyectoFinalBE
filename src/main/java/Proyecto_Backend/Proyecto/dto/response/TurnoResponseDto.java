@@ -1,5 +1,6 @@
 package Proyecto_Backend.Proyecto.dto.response;
 
+import Proyecto_Backend.Proyecto.utils.GsonProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TurnoResponseDto {
-    public Integer id;
+    private Integer id;
     // datos del paciente
-    public PacienteResponseDto pacienteResponseDto;
+    private PacienteResponseDto pacienteResponseDto;
     // datos del odontologo
-    public OdontologoResponseDto odontologoResponseDto;
-    public String fecha;
+    private OdontologoResponseDto odontologoResponseDto;
+    private String fecha;
+    @Override
+    public String toString() {
+        return GsonProvider.getGson().toJson(this);
+    }
 }
