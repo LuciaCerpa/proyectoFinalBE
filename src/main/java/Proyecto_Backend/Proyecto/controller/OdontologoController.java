@@ -3,6 +3,7 @@ package Proyecto_Backend.Proyecto.controller;
 import Proyecto_Backend.Proyecto.entity.Odontologo;
 import Proyecto_Backend.Proyecto.service.IOdontologoService;
 import Proyecto_Backend.Proyecto.service.impl.OdontologoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class OdontologoController {
     }
     //POST
     @PostMapping("/guardar")
-    public ResponseEntity<Odontologo> agregarOdontologo(@RequestBody Odontologo odontologo){
+    public ResponseEntity<Odontologo> agregarOdontologo(@Valid @RequestBody Odontologo odontologo){
         // aca jackson convierte el objeto JSON a un objeto Java "odontologo"
         return ResponseEntity.ok(odontologoService.guardarOdontologo(odontologo));
     }

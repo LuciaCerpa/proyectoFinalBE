@@ -2,6 +2,7 @@ package Proyecto_Backend.Proyecto.service.impl;
 
 
 import Proyecto_Backend.Proyecto.entity.Paciente;
+import Proyecto_Backend.Proyecto.exception.ResourceNotFoundException;
 import Proyecto_Backend.Proyecto.repository.IPacienteRepository;
 import Proyecto_Backend.Proyecto.service.IPacienteService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,13 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public Optional<Paciente> buscarPorId(Integer id) {
-        return pacienteRepository.findById(id);
+
+        Optional<Paciente> pacienteEncontrado = pacienteRepository.findById(id);
+        if(pacienteEncontrado.isPresent()){
+            return pacienteEncontrado;
+        } else {
+            throw new ResourceNotFoundException("Paciente no encontrado");
+        }
     }
 
     @Override
@@ -44,7 +51,12 @@ public class PacienteService implements IPacienteService {
     @Override
     public void eliminarPaciente(Integer id) {
 
-        pacienteRepository.deleteById(id);
+        Optional<Paciente> pacienteEncontrado = buscarPorId(id);
+        if(pacienteEncontrado.isPresent()){
+            pacienteRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Paciente no encontrado");
+        }
     }
 
     @Override

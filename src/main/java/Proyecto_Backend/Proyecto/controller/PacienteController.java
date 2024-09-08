@@ -3,6 +3,7 @@ package Proyecto_Backend.Proyecto.controller;
 
 import Proyecto_Backend.Proyecto.entity.Paciente;
 import Proyecto_Backend.Proyecto.service.IPacienteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class PacienteController {
 
     //POST
     @PostMapping("/guardar")
-    public ResponseEntity<Paciente> guardarPaciente(@RequestBody Paciente paciente){
+    public ResponseEntity<Paciente> guardarPaciente(@Valid @RequestBody Paciente paciente){
         return ResponseEntity.ok(pacienteService.guardarPaciente(paciente));
     }
 
