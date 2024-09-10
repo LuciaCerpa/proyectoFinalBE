@@ -4,7 +4,7 @@ const apiURL = "http://localhost:8080";
 form.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const numeroMatricula = document.getElementById("numeroMatricula").value;
+  const nroMatricula = document.getElementById("nroMatricula").value;
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;  
   
@@ -14,7 +14,7 @@ form.addEventListener("submit", function (event) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      numeroMatricula,
+      nroMatricula,
       nombre,
       apellido      
     }),

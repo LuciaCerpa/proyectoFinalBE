@@ -18,11 +18,11 @@ function fetchOdontologos() {
         row.innerHTML = `
         <tr class="table-light">
               <td>${index+1}</td>
-              <td>${odontologo.numeroMatricula}</td>              
+              <td>${odontologo.nroMatricula}</td>              
               <td>${odontologo.nombre}</td>              
               <td>${odontologo.apellido}</td>    
               <td>
-                <button class="btn btn-outline-primary btn-sm" onclick="editOdontologo(${odontologo.id}, '${odontologo.numeroMatricula}', '${odontologo.nombre}','${odontologo.apellido}')">Modificar</button>
+                <button class="btn btn-outline-primary btn-sm" onclick="editOdontologo(${odontologo.id}, '${odontologo.nroMatricula}', '${odontologo.nombre}','${odontologo.apellido}')">Modificar</button>
                 <button class="btn btn-outline-danger btn-sm" onclick="deleteOdontologo(${odontologo.id})">Eliminar</button>
               </td>  
         </tr>              

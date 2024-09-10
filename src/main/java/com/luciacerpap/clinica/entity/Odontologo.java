@@ -3,6 +3,7 @@ package com.luciacerpap.clinica.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luciacerpap.clinica.utils.GsonProvider;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Odontologo {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank
     private String nroMatricula;
     private String apellido;
     private String nombre;

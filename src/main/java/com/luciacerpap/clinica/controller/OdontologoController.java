@@ -1,8 +1,9 @@
 package com.luciacerpap.clinica.controller;
 
+import com.luciacerpap.clinica.dto.request.OdontologoRequestDto;
+import com.luciacerpap.clinica.dto.response.OdontologoResponseDto;
 import com.luciacerpap.clinica.entity.Odontologo;
 import com.luciacerpap.clinica.service.IOdontologoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,34 +26,24 @@ public class OdontologoController {
 
     //PUT
     @PutMapping("/modificar")
-    public ResponseEntity<String> modificarOdontologo(@RequestBody Odontologo odontologo){
-        Optional<Odontologo> odontologoEncontrado = odontologoService.buscarPorId(odontologo.getId());
-        if(odontologoEncontrado.isPresent()){
-            odontologoService.guardarOdontologo(odontologo);
-            String jsonResponse =  "{\"mensaje\": \"El odontologo fue modificado\"}";
-            return ResponseEntity.ok(jsonResponse);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<String> modificarOdontologo(@RequestBody OdontologoRequestDto odontologo) {
+        odontologoService.modificarOdontologo(odontologo);
+        String jsonResponse = "{\"mensaje\": \"El odontologo fue modificado\"}";
+        return ResponseEntity.ok(jsonResponse);
     }
 
     //DELETE
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarOdontologo(@PathVariable Integer id){
-        Optional<Odontologo> odontologoEncontrado = odontologoService.buscarPorId(id);
-        if(odontologoEncontrado.isPresent()) {
-            odontologoService.eliminarOdontologo(id);
-            String jsonResponse = "{\"mensaje\": \"El odontologo fue eliminado\"}";
-            return ResponseEntity.ok(jsonResponse);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        odontologoService.eliminarOdontologo(id);
+        String jsonResponse = "{\"mensaje\": \"El odontologo fue eliminado\"}";
+        return ResponseEntity.ok(jsonResponse);
     }
 
     @GetMapping("/buscar/{id}")
-    public ResponseEntity<Odontologo> buscarPorId(@PathVariable Integer id){
-        Optional<Odontologo> odontologo = odontologoService.buscarPorId(id);
-        return odontologo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Optional<OdontologoResponseDto> buscarPorId(@PathVariable Integer id){
+        Optional<OdontologoResponseDto> odontologo = odontologoService.buscarPorId(id);
+        return odontologo;
     }
 
     //GET

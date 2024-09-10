@@ -1,13 +1,14 @@
 editOdontologo = function (
     id,
-    numeroMatricula,
+    nroMatricula,
     nombre,
     apellido,
 ) {
+    console.log("Edit odontologo" + id,nroMatricula,nombre,apellido)
     currentOdontologoId = id;
     document.getElementById("editNombre").value = nombre;
     document.getElementById("editApellido").value = apellido;
-    document.getElementById("editNumeroMatricula").value = numeroMatricula;
+    document.getElementById("editNroMatricula").value = nroMatricula;
     editModal.show();
 };
 
@@ -15,7 +16,7 @@ editForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const nombre = document.getElementById("editNombre").value;
     const apellido = document.getElementById("editApellido").value;
-    const numeroMatricula = document.getElementById("editNumeroMatricula").value;
+    const nroMatricula = document.getElementById("editNroMatricula").value;
 
     fetch(`${apiURL}/odontologo/modificar`, {
         method: "PUT",
@@ -26,7 +27,7 @@ editForm.addEventListener("submit", function (event) {
             id: currentOdontologoId,
             nombre,
             apellido,
-            numeroMatricula
+            nroMatricula
         }),
     })
         .then((response) => response.json())

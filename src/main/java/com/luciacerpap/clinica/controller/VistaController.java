@@ -1,5 +1,6 @@
 package com.luciacerpap.clinica.controller;
 
+import com.luciacerpap.clinica.dto.response.PacienteResponseDto;
 import com.luciacerpap.clinica.entity.Paciente;
 import com.luciacerpap.clinica.service.impl.PacienteService;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class VistaController {
     //localhost:8080/index?id=1&nombre=paciente1
     @GetMapping("/index")
     public String buscarPaciente(Model model, @RequestParam Integer id){
-      Optional<Paciente> paciente = pacienteService.buscarPorId(id);
+      Optional<PacienteResponseDto> paciente = pacienteService.buscarPorId(id);
         model.addAttribute("nombre", paciente.get().getNombre());
        model.addAttribute("apellido", paciente.get().getApellido());
        return "vista/paciente";
